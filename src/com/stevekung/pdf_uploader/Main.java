@@ -25,6 +25,7 @@ public class Main implements ActionListener
     private final CommentedFileConfig config = CommentedFileConfig.builder("config.toml").autosave().autoreload().build();
     private final MenuItem startStopMenu = new MenuItem("Pause Upload");
     private final MenuItem changePathMenu = new MenuItem("Change Path");
+    private final MenuItem openFolderMenu = new MenuItem("Open Folder");
     private final MenuItem exitMenu = new MenuItem("Exit");
     private final PopupMenu popup = new PopupMenu();
     private final JSystemFileChooser chooser = new JSystemFileChooser();
@@ -94,6 +95,17 @@ public class Main implements ActionListener
                 System.out.println("Selected path: " + this.path);
             }
         }
+        else if (event.getSource() == this.openFolderMenu)
+        {
+            try
+            {
+                Desktop.getDesktop().open(this.currentDirectory);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -147,6 +159,8 @@ public class Main implements ActionListener
             this.changePathMenu.addActionListener(this);
             this.popup.add(this.changePathMenu);
             this.exitMenu.addActionListener(this);
+            this.popup.add(this.openFolderMenu);
+            this.openFolderMenu.addActionListener(this);
             this.popup.add(this.exitMenu);
             this.trayIcon = new TrayIcon(image, "PDF Uploader", this.popup);
             this.trayIcon.setImageAutoSize(true);
