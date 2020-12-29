@@ -7,11 +7,6 @@ public class DirectoryFilterWatcher implements FileFilter
 {
     private final String filter;
 
-    public DirectoryFilterWatcher()
-    {
-        this.filter = "";
-    }
-
     public DirectoryFilterWatcher(String filter)
     {
         this.filter = filter;
@@ -20,10 +15,6 @@ public class DirectoryFilterWatcher implements FileFilter
     @Override
     public boolean accept(File file)
     {
-        if ("".equals(this.filter))
-        {
-            return true;
-        }
         return file.getName().endsWith(this.filter);
     }
 }
