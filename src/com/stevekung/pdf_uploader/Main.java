@@ -34,6 +34,7 @@ public class Main implements ActionListener
     private String path = System.getProperty("user.home") + "\\lpru_pdf"; // default path ของโปรแกรมอัพโหลด
     private boolean pause;
     private File currentDirectory = new File(this.path);
+    private DirectoryWatcher task;
 
     public static void main(String[] args)
     {
@@ -92,6 +93,8 @@ public class Main implements ActionListener
                 this.path = this.chooser.getSelectedFile().getAbsolutePath();
                 this.config.set("path", this.path);
                 this.config.save();
+                this.currentDirectory = new File(this.path);
+                this.task.setPath(this.path);
                 System.out.println("Selected path: " + this.path);
             }
         }
@@ -135,6 +138,7 @@ public class Main implements ActionListener
             }
         }
 
+        this.currentDirectory.mkdirs();
         System.out.println("ConfigAfterLoad: " + this.config);
     }
 
@@ -190,7 +194,19 @@ public class Main implements ActionListener
      */
     private void runFileUploader()
     {
-        DirectoryWatcher task = new DirectoryWatcher(this.path, "pdf")
+        this.task = this.createTask(this.path);
+        Timer timer = new Timer();
+        timer.schedule(this.task, new Date(), 1000L);
+    }
+
+    /**
+     * สร้าง task สำหรับเช็คไฟล์
+     * @param path
+     * @return
+     */
+    private DirectoryWatcher createTask(String path)
+    {
+        return new DirectoryWatcher(path, "pdf")
         {
             @Override
             protected void onFileAdd(File file)
@@ -203,9 +219,6 @@ public class Main implements ActionListener
                 }
             }
         };
-
-        Timer timer = new Timer();
-        timer.schedule(task, new Date(), 1000L);
     }
 
     /**

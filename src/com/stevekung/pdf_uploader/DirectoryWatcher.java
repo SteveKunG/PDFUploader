@@ -5,7 +5,7 @@ import java.util.*;
 
 public abstract class DirectoryWatcher extends TimerTask
 {
-    private final String path;
+    private String path;
     private final HashMap<File, Long> dir = new HashMap<>();
     private final DirectoryFilterWatcher watcher;
     private File[] filesArray;
@@ -58,6 +58,12 @@ public abstract class DirectoryWatcher extends TimerTask
             File deletedFile = it.next();
             this.dir.remove(deletedFile);
         }
+    }
+
+    public void setPath(String path)
+    {
+        this.path = path;
+        this.filesArray = new File(path).listFiles(this.watcher);
     }
 
     protected abstract void onFileAdd(File file);
