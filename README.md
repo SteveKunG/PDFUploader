@@ -1,2 +1,2 @@
 # PDFUploader
-This is just a simple project
+Simple PDF Uploader for LPRU
